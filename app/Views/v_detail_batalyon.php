@@ -1,4 +1,40 @@
-<div id="map" style="width: 100%; height: 650px;"></div>
+<div class="col-sm-6">
+<div id="map" style="width: 100%; height: 500px;"></div>
+</div>
+
+<div class="col-sm-6">
+<img src="<?= base_url('foto/' . $batalyon['foto']) ?>" width="100%" height="500px">
+</div>
+
+<div class="col-sm-12">
+<table class="table table-bordered table-sm">
+    <tr>
+        <th width="180px">Nama Batalyon</th>
+        <th width="50px" class="text-center">:</th>
+        <td><?= $batalyon['nama_batalyon'] ?></td>
+    </tr>
+    <tr>
+        <th>Komando Batalyon</th>
+        <th class="text-center">:</th>
+        <td><?= $batalyon['komando'] ?></td>
+    </tr>
+    <tr>
+        <th>Tahun dibentuk</th>
+        <th class="text-center">:</th>
+        <td><?= $batalyon['thn_dibentuk'] ?></td>
+    </tr>
+    <tr>
+        <th>Cabang Batalyon</th>
+        <th class="text-center">:</th>
+        <td><?= $batalyon['cabang'] ?></td>
+    </tr>
+    <tr>
+        <th>Alamat Batalyon</th>
+        <th class="text-center">:</th>
+        <td><?= $batalyon['alamat'] ?>, Prov. <?= $batalyon['nama_provinsi'] ?>, Kab. <?= $batalyon['nama_kabupaten'] ?>, Kec. <?= $batalyon['nama_kecamatan'] ?></td>
+    </tr>
+</table>
+</div>
 
 <script>
 const cities = L.layerGroup();
@@ -18,7 +54,7 @@ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStree
 });
 
 const map = L.map('map', {
-center: [<?= $web['coordinate_wilayah'] ?>],
+center: [<?= $batalyon['coordinate'] ?>],
 zoom: <?= $web['zoom_view'] ?>,
 layers: [osm]
 });
@@ -46,29 +82,5 @@ attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright"
 layerControl.addBaseLayer(openTopoMap, 'OpenTopoMap');
 layerControl.addOverlay(batalyon, 'Batalyon')
 
-<?php foreach ($wilayah as $key => $value) { ?>
-        L.geoJSON(<?= $value['geojson'] ?>, {
-          fillColor: '<?= $value['warna'] ?>',
-          fillOpacity: 0.5,
-        })
-        .bindPopup("<b><?= $value['nama_wilayah'] ?></b>")
-        .addTo(map);
-    <?php } ?>
-
-<?php foreach ($batalyon as $key => $value) { ?>
-  var Icon = L.icon({
-    iconUrl: '<?= base_url('marker/' . $value['marker']) ?>',
-    iconSize:     [35, 50], // size of the icon
-});
-
-        L.marker([<?= $value['coordinate'] ?>], {
-          icon: Icon
-        })
-        .bindPopup("<img src='<?= base_url('foto/' . $value['foto']) ?>' width='210px' height='150px'><br>" +
-        "<b><?= $value['nama_batalyon'] ?></b><br>" +
-        "Tahun dibentuk <?= $value['thn_dibentuk'] ?><br>" +
-        "<?= $value['cabang'] ?><br><br>" +
-        "<a href='<?= base_url('Home/DetailBatalyon/' . $value['id_batalyon']) ?>' class='btn btn-primary btn-xs text-white'>Detail</a>")
-        .addTo(map);
-    <?php } ?>
+L.marker([<?= $batalyon['coordinate'] ?>]).addTo(map)
 </script>
